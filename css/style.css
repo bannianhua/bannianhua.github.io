@@ -1,0 +1,802 @@
+/* ============================================================
+   熙叆角色资源站 · 样式 v2 ——「黄昏魔法时间 · 向日葵」风
+   依据角色设定（向日葵精灵 / 暖黄水手服 / 绿色发带 / 黄昏魔法时间）
+   与素材照片色调（暖米色 · 明亮 · 低饱和）重新设计：
+   奶油米白底 + 向日葵金 + 黄昏柔粉 + 叶绿点缀
+   ============================================================ */
+
+:root {
+  --gold: #e9a13b;          /* 向日葵金 */
+  --gold-deep: #c97f1e;     /* 深金 */
+  --gold-soft: #f5c56f;     /* 浅金 */
+  --pink: #f282b3;          /* 黄昏柔粉 */
+  --leaf: #7fa65a;          /* 叶绿（呼应绿色发带） */
+  --ink: #4f3a26;           /* 暖棕墨色 */
+  --ink-dim: #8a6f52;       /* 次级文字 */
+  --ink-faint: #b0967a;     /* 弱文字 */
+  --card: #fffdf7;          /* 卡片奶油底 */
+  --card-soft: rgba(255, 252, 242, 0.82);
+  --line: rgba(214, 158, 74, 0.5);        /* 金色描边 */
+  --line-soft: rgba(214, 158, 74, 0.28);  /* 弱描边 */
+  --shadow-warm: rgba(196, 140, 60, 0.20);
+  --bg: linear-gradient(180deg,
+        #fff8e6 0%, #ffefd0 34%, #ffe3ba 60%, #ffd9b0 78%, #f4cfc4 100%);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  background-attachment: fixed;
+  color: var(--ink);
+  font-family: "Microsoft YaHei", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  line-height: 1.75;
+}
+
+/* ---------- 黄昏光晕 + 飘落的花瓣与光尘 ---------- */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 42% 30% at 16% 8%, rgba(255, 224, 150, 0.55), transparent 70%),
+    radial-gradient(ellipse 36% 26% at 86% 14%, rgba(255, 196, 120, 0.45), transparent 70%),
+    radial-gradient(ellipse 55% 34% at 50% 104%, rgba(244, 180, 200, 0.35), transparent 72%);
+}
+#stars {
+  position: fixed; inset: 0; z-index: 1; pointer-events: none;
+  overflow: hidden;
+}
+/* 光尘：黄昏里漂浮的细小金色光点 */
+#stars .dust {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffedb8, rgba(255, 214, 130, 0.1));
+  animation: dustFloat var(--dur, 12s) ease-in-out infinite;
+}
+@keyframes dustFloat {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.15; }
+  50%      { transform: translateY(-70px) scale(1.25); opacity: 0.75; }
+}
+/* 花瓣：飘落的向日葵花瓣 */
+#stars .petal {
+  position: absolute;
+  top: -24px;
+  width: 13px; height: 20px;
+  border-radius: 62% 38% 58% 42%;
+  background: linear-gradient(135deg, #ffdd85 10%, #f5b845 60%, #e89c2e 100%);
+  box-shadow: inset -2px -2px 4px rgba(190, 120, 30, 0.35);
+  opacity: 0.9;
+  animation: petalFall var(--dur, 13s) linear infinite;
+}
+@keyframes petalFall {
+  0%   { transform: translate(0, -4vh) rotate(0deg); }
+  25%  { transform: translate(16px, 26vh) rotate(95deg); }
+  50%  { transform: translate(-12px, 52vh) rotate(185deg); }
+  75%  { transform: translate(14px, 78vh) rotate(275deg); }
+  100% { transform: translate(0, 106vh) rotate(360deg); }
+}
+
+/* ---------- 顶栏导航 ---------- */
+header.site-nav {
+  position: sticky; top: 0; z-index: 50;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 28px;
+  background: rgba(255, 250, 238, 0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line-soft);
+}
+.brand {
+  display: flex; align-items: baseline; gap: 10px;
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  text-decoration: none;
+}
+.brand .brand-name {
+  font-size: 22px; font-weight: 700; letter-spacing: 4px;
+  color: var(--gold-deep);
+  text-shadow: 0 0 14px rgba(233, 161, 59, 0.35);
+}
+.brand .brand-sub { font-size: 12px; color: var(--ink-dim); letter-spacing: 2px; }
+nav.menu { display: flex; gap: 6px; flex-wrap: wrap; }
+nav.menu a {
+  padding: 6px 16px;
+  font-size: 14px; letter-spacing: 2px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  transition: all 0.18s ease;
+}
+nav.menu a:hover { color: var(--gold-deep); border-color: var(--line); }
+nav.menu a.active {
+  color: #fff;
+  background: linear-gradient(180deg, #f7c66f, var(--gold) 55%, var(--gold-deep));
+  border-color: var(--gold-deep);
+  box-shadow: 0 4px 14px rgba(233, 161, 59, 0.35);
+}
+
+/* ---------- 通用容器 ---------- */
+main {
+  position: relative; z-index: 5;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 36px 24px 90px;
+}
+.section-title {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: clamp(26px, 4vw, 36px);
+  font-weight: 700;
+  letter-spacing: 6px;
+  text-align: center;
+  margin-bottom: 6px;
+  background: linear-gradient(180deg, #ffdf96 5%, #f0ad41 55%, #cf8320 95%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 10px rgba(233, 161, 59, 0.3));
+}
+.section-title::before { content: '❀ '; }
+.section-title::after { content: ' ❀'; }
+.section-sub {
+  text-align: center; color: var(--ink-dim); font-size: 14px;
+  margin-bottom: 26px; letter-spacing: 1px;
+}
+
+/* ---------- 按钮 ---------- */
+.btn {
+  display: inline-block;
+  padding: 9px 24px;
+  font-size: 15px;
+  font-family: inherit;
+  color: var(--gold-deep);
+  background: rgba(255, 252, 244, 0.85);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  cursor: pointer;
+  text-decoration: none;
+  letter-spacing: 3px;
+  transition: all 0.18s ease;
+  box-shadow: 0 3px 10px rgba(196, 140, 60, 0.14);
+}
+.btn:hover {
+  color: #fff;
+  background: linear-gradient(180deg, #f7c66f, var(--gold) 55%, var(--gold-deep));
+  border-color: var(--gold-deep);
+  box-shadow: 0 6px 18px rgba(233, 161, 59, 0.4);
+  transform: translateY(-1px);
+}
+.btn.small { padding: 5px 14px; font-size: 13px; letter-spacing: 1px; }
+
+/* ---------- 首页 Hero ---------- */
+.hero {
+  display: flex; align-items: center; gap: 44px;
+  padding: 30px 8px 44px;
+}
+.hero-text { flex: 1.15; min-width: 300px; }
+.hero-text .kicker {
+  font-size: 13px; letter-spacing: 6px; color: var(--leaf); margin-bottom: 10px;
+}
+.hero-text .kicker::before { content: '🌻 '; font-size: 15px; }
+.hero-text h1 {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: clamp(44px, 7vw, 76px);
+  font-weight: 700;
+  letter-spacing: 12px;
+  background: linear-gradient(180deg, #fff0b8 8%, #f5bd52 40%, #e0962a 80%, #c97f1e 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 16px rgba(233, 161, 59, 0.4));
+  animation: sunGlow 3.6s ease-in-out infinite;
+}
+@keyframes sunGlow {
+  0%, 100% { filter: drop-shadow(0 4px 10px rgba(233,161,59,0.28)); }
+  50%      { filter: drop-shadow(0 4px 26px rgba(233,161,59,0.55)); }
+}
+.hero-text .hero-sub {
+  margin-top: 10px;
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: clamp(14px, 2vw, 20px);
+  color: var(--pink); letter-spacing: 6px;
+}
+.hero-text .hero-desc {
+  margin-top: 18px; color: var(--ink-dim); font-size: 15px; max-width: 520px;
+}
+.hero-actions { margin-top: 26px; display: flex; gap: 14px; flex-wrap: wrap; }
+.hero-art {
+  flex: 0.85; min-width: 260px; max-width: 380px;
+  position: relative;
+}
+/* 拍立得相框：呼应「摄影能力」的设定 */
+.hero-art .frame {
+  background: #fffdf6;
+  padding: 10px 10px 40px;
+  border-radius: 6px;
+  box-shadow: 0 18px 46px var(--shadow-warm), 0 0 0 1px rgba(214, 158, 74, 0.35);
+  transform: rotate(1.6deg);
+  transition: transform 0.5s ease;
+}
+.hero-art .frame:hover { transform: rotate(0deg) scale(1.02); }
+.hero-art img {
+  width: 100%; max-height: 420px;
+  object-fit: cover; display: block;
+  background: #f3e9d8;
+}
+.hero-art .frame figcaption {
+  position: absolute; bottom: 8px; left: 0; right: 0;
+  text-align: center;
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 13px; color: #9a7b4f; letter-spacing: 2px;
+}
+/* 相框角落的小花装饰 */
+.hero-art .frame::after {
+  content: '❀';
+  position: absolute; bottom: 6px; right: 14px;
+  color: #e9a13b; font-size: 14px;
+}
+
+/* ---------- 资料卡 ---------- */
+.profile-card {
+  background: var(--card-soft);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 26px 30px;
+  margin-bottom: 34px;
+  box-shadow: 0 10px 34px var(--shadow-warm);
+  backdrop-filter: blur(4px);
+}
+.profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px 26px;
+}
+.profile-grid .row {
+  display: flex; gap: 8px; align-items: baseline;
+  font-size: 14.5px;
+  border-bottom: 1px dashed rgba(214, 158, 74, 0.35);
+  padding: 6px 0;
+}
+.profile-grid .row .k { color: var(--gold-deep); white-space: nowrap; letter-spacing: 1px; }
+.profile-grid .row .v { color: var(--ink); }
+.profile-quote {
+  margin-top: 16px; padding: 12px 18px;
+  border-left: 3px solid var(--gold);
+  background: rgba(245, 197, 111, 0.18);
+  border-radius: 0 12px 12px 0;
+  color: var(--ink-dim); font-size: 14px;
+}
+
+/* ---------- 统计条 ---------- */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin: 30px 0 40px;
+}
+.stats .stat {
+  text-align: center;
+  padding: 20px 10px;
+  background: var(--card-soft);
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(196, 140, 60, 0.12);
+}
+.stats .stat b {
+  display: block;
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 34px;
+  background: linear-gradient(180deg, #ffdf96, #e89c2e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.stats .stat span { font-size: 13px; color: var(--ink-dim); letter-spacing: 2px; }
+
+/* ---------- 入口卡片 ---------- */
+.entry-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 44px;
+}
+.entry-card {
+  display: block;
+  text-decoration: none;
+  padding: 26px 22px;
+  background: var(--card-soft);
+  border: 1px solid var(--line-soft);
+  border-radius: 18px;
+  box-shadow: 0 6px 20px rgba(196, 140, 60, 0.12);
+  transition: all 0.22s ease;
+}
+.entry-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--line);
+  box-shadow: 0 14px 34px var(--shadow-warm);
+}
+.entry-card .ico {
+  font-family: "STKaiti", "KaiTi", serif;
+  font-size: 30px; color: var(--gold); letter-spacing: 2px;
+}
+.entry-card h3 {
+  margin: 10px 0 6px;
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 21px; color: var(--gold-deep); letter-spacing: 3px;
+}
+.entry-card p { font-size: 13px; color: var(--ink-dim); }
+
+/* ---------- 精选记忆 ---------- */
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 40px;
+}
+.feature-item {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fdf6e8;
+  border: 1px solid var(--line-soft);
+  aspect-ratio: 1 / 1.15;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(196, 140, 60, 0.14);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.feature-item:hover { transform: translateY(-3px); box-shadow: 0 12px 28px var(--shadow-warm); }
+.feature-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.feature-item .tag {
+  position: absolute; left: 8px; bottom: 8px;
+  font-size: 11px; letter-spacing: 2px;
+  color: var(--gold-deep);
+  background: rgba(255, 252, 240, 0.88);
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+}
+
+/* ---------- 图库筛选 ---------- */
+.filters {
+  display: flex; justify-content: center; gap: 10px;
+  flex-wrap: wrap; margin-bottom: 24px;
+}
+.filters button {
+  padding: 7px 20px;
+  font-size: 14px; letter-spacing: 3px;
+  font-family: inherit;
+  color: var(--ink-dim);
+  background: rgba(255, 252, 244, 0.8);
+  border: 1px solid var(--line-soft);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+.filters button:hover { color: var(--gold-deep); border-color: var(--line); }
+.filters button.active {
+  color: #fff;
+  background: linear-gradient(180deg, #f7c66f, var(--gold) 55%, var(--gold-deep));
+  border-color: var(--gold-deep);
+  font-weight: 700;
+  box-shadow: 0 4px 14px rgba(233, 161, 59, 0.35);
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+  gap: 14px;
+}
+.photo-card {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fdf6e8;
+  border: 1px solid var(--line-soft);
+  aspect-ratio: 1 / 1.18;
+  cursor: zoom-in;
+  box-shadow: 0 6px 18px rgba(196, 140, 60, 0.14);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.photo-card:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 12px 30px var(--shadow-warm); }
+.photo-card img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.photo-card .meta {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 18px 10px 8px;
+  background: linear-gradient(transparent, rgba(201, 127, 30, 0.75));
+  font-size: 11.5px; color: #fff8e8; letter-spacing: 1px;
+}
+.photo-card .meta .no { color: #ffe9ad; font-family: "STKaiti", "KaiTi", serif; }
+.gallery-empty { text-align: center; color: var(--ink-faint); padding: 40px 0; }
+.gallery-note {
+  margin-top: 22px; text-align: center; font-size: 12.5px; color: var(--ink-faint);
+}
+
+/* ---------- 灯箱 ---------- */
+#lightbox {
+  position: fixed; inset: 0; z-index: 100;
+  display: none;
+  align-items: center; justify-content: center;
+  background: rgba(96, 62, 28, 0.88);
+  backdrop-filter: blur(6px);
+}
+#lightbox.open { display: flex; animation: fadeIn 0.25s ease both; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+#lightbox .lb-box {
+  max-width: min(92vw, 1500px);
+  max-height: 86vh;
+  display: flex; flex-direction: column; align-items: center;
+}
+#lightbox img {
+  max-width: 92vw; max-height: 74vh;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(60, 36, 12, 0.55), 0 0 0 1px rgba(255, 224, 150, 0.4);
+}
+#lightbox .lb-info {
+  margin-top: 14px;
+  display: flex; align-items: center; gap: 16px; flex-wrap: wrap; justify-content: center;
+  color: #ffe9c2; font-size: 14px;
+}
+#lightbox .lb-info b { color: #ffe9ad; font-weight: 700; }
+#lightbox .lb-close {
+  position: absolute; top: 22px; right: 30px;
+  font-size: 30px; color: #ffe9c2;
+  background: none; border: none; cursor: pointer;
+  transition: color 0.15s ease;
+}
+#lightbox .lb-close:hover { color: #ffd9a0; }
+#lightbox .lb-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  font-size: 40px; color: #ffe9c2;
+  background: none; border: none; cursor: pointer;
+  padding: 10px 18px;
+  transition: color 0.15s ease;
+}
+#lightbox .lb-nav:hover { color: #ffedb8; }
+#lightbox .lb-prev { left: 14px; }
+#lightbox .lb-next { right: 14px; }
+
+/* ---------- 影音区 ---------- */
+.video-card {
+  background: var(--card-soft);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 20px;
+  margin-bottom: 24px;
+  box-shadow: 0 8px 26px var(--shadow-warm);
+}
+.video-card video, .video-card audio { width: 100%; border-radius: 10px; background: #2a1d10; }
+.video-card .vc-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 12px; flex-wrap: wrap; gap: 8px;
+}
+.video-card h3 {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 20px; color: var(--gold-deep); letter-spacing: 3px;
+}
+.video-card .vc-date { font-size: 12.5px; color: var(--ink-faint); letter-spacing: 1px; }
+.video-card .vc-actions { margin-top: 12px; display: flex; gap: 10px; flex-wrap: wrap; }
+.video-card .vc-note { margin-top: 10px; font-size: 12.5px; color: var(--ink-faint); }
+.audio-card {
+  background: var(--card-soft);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 22px;
+  display: flex; flex-direction: column; gap: 12px;
+  box-shadow: 0 8px 26px var(--shadow-warm);
+}
+.audio-card .ac-head { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+.audio-card h3 {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 20px; color: var(--gold-deep); letter-spacing: 3px;
+}
+.audio-card .ac-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* ---------- 设定页 ---------- */
+.chara-section { margin-bottom: 40px; }
+.chara-card {
+  background: var(--card-soft);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 30px 34px;
+  margin-bottom: 26px;
+  box-shadow: 0 10px 34px var(--shadow-warm);
+  backdrop-filter: blur(4px);
+}
+.chara-card .cc-head {
+  display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+  margin-bottom: 6px;
+}
+.chara-card .cc-head h2 {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 30px; letter-spacing: 6px;
+  background: linear-gradient(180deg, #ffdf96, #e89c2e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.chara-card .cc-head .jp { color: var(--pink); font-size: 14px; letter-spacing: 3px; }
+.chara-card .cc-head .aka { color: var(--ink-faint); font-size: 13px; }
+.chara-card .cc-intro { margin-bottom: 18px; color: var(--ink-dim); font-size: 14.5px; }
+.attr-table { width: 100%; border-collapse: collapse; margin-bottom: 18px; }
+.attr-table td {
+  padding: 8px 12px;
+  border-bottom: 1px dashed rgba(214, 158, 74, 0.3);
+  font-size: 14.5px; vertical-align: top;
+}
+.attr-table td.k {
+  width: 96px; color: var(--gold-deep); white-space: nowrap;
+  letter-spacing: 2px;
+}
+.story-block { margin-top: 6px; }
+.story-block h4 {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 17px; color: var(--pink); letter-spacing: 3px;
+  margin: 18px 0 8px;
+}
+.story-block h4::before { content: '✿ '; }
+.story-block p { font-size: 14.5px; color: var(--ink-dim); margin-bottom: 10px; }
+
+/* ---------- 资料卡小标题（主页角色卡） ---------- */
+.profile-card .card-head {
+  display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap;
+  margin-bottom: 12px;
+}
+.profile-card .card-head h3 {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 24px; letter-spacing: 5px;
+  background: linear-gradient(180deg, #ffdf96, #e89c2e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.profile-card .card-head span { font-size: 13px; color: var(--ink-faint); letter-spacing: 2px; }
+
+/* 带照片的资料卡（左图右文） */
+.profile-card.with-photo {
+  display: flex; gap: 28px; align-items: flex-start;
+}
+.profile-card .pc-photo { flex: 0 0 190px; }
+.pc-photo .mini-frame {
+  position: relative;
+  background: #fffdf6;
+  padding: 8px 8px 30px;
+  border-radius: 6px;
+  box-shadow: 0 12px 28px var(--shadow-warm), 0 0 0 1px rgba(214, 158, 74, 0.35);
+  transform: rotate(-2deg);
+  transition: transform 0.4s ease;
+}
+.pc-photo .mini-frame:hover { transform: rotate(0deg) scale(1.02); }
+.pc-photo img {
+  width: 100%; max-height: 300px;
+  object-fit: cover; display: block;
+  border-radius: 3px;
+  background: #f3e9d8;
+}
+.pc-photo figcaption {
+  position: absolute; left: 0; right: 0; bottom: 6px;
+  text-align: center;
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 12px; color: #9a7b4f; letter-spacing: 2px;
+}
+.profile-card .pc-body { flex: 1; min-width: 0; }
+
+/* ---------- 书籍信息卡（聆熙童话） ---------- */
+.book-card {
+  display: flex; gap: 26px; align-items: flex-start;
+  background: var(--card-soft);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 26px 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 10px 34px var(--shadow-warm);
+  backdrop-filter: blur(4px);
+}
+.book-cover {
+  flex: 0 0 190px;
+  aspect-ratio: 3 / 4.2;
+  background: linear-gradient(160deg, #ffdf9a 0%, #f2b33d 45%, #d98a1f 100%);
+  border-radius: 10px;
+  padding: 22px 16px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  box-shadow: 0 12px 30px rgba(196, 140, 60, 0.35), inset 0 0 0 3px rgba(255, 255, 255, 0.25);
+  color: #5c3a10;
+}
+.book-cover .bc-title {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 30px; font-weight: 700; letter-spacing: 8px;
+  color: #fff8e6;
+  text-shadow: 0 2px 10px rgba(160, 90, 10, 0.55);
+}
+.book-cover .bc-sub {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 15px; line-height: 1.8; letter-spacing: 3px;
+  color: #7a4f14;
+}
+.book-cover .bc-emoji { font-size: 20px; letter-spacing: 6px; }
+.book-info { flex: 1; min-width: 260px; }
+.book-info h3 {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 22px; color: var(--gold-deep); letter-spacing: 3px;
+  margin-bottom: 4px;
+}
+.book-info .book-meta { font-size: 13px; color: var(--ink-faint); margin-bottom: 12px; }
+.book-intro p { font-size: 14.5px; color: var(--ink-dim); margin-bottom: 10px; }
+.book-download { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.book-note { margin-top: 10px; font-size: 12.5px; color: var(--ink-faint); }
+
+/* ---------- 在线阅读器 ---------- */
+.reader {
+  display: flex; gap: 18px; align-items: flex-start;
+}
+.reader-side {
+  flex: 0 0 250px;
+  max-height: 72vh;
+  overflow-y: auto;
+  background: var(--card-soft);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 8px 26px var(--shadow-warm);
+  position: sticky; top: 90px;
+}
+.rs-head {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 10px;
+}
+.rs-head span {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 17px; letter-spacing: 4px; color: var(--gold-deep);
+}
+#btn-close-side { display: none; }
+.cl-group {
+  font-size: 12px; letter-spacing: 3px; color: var(--ink-faint);
+  margin: 12px 4px 6px; padding-bottom: 4px;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.chap-list a {
+  display: block;
+  padding: 7px 10px;
+  font-size: 13.5px;
+  color: var(--ink-dim);
+  text-decoration: none;
+  border-radius: 8px;
+  transition: all 0.15s ease;
+}
+.chap-list a:hover { background: rgba(245, 197, 111, 0.25); color: var(--gold-deep); }
+.chap-list a.active {
+  background: linear-gradient(180deg, #f7c66f, var(--gold) 60%, var(--gold-deep));
+  color: #fff;
+  font-weight: 700;
+}
+.reader-main { flex: 1; min-width: 0; }
+.reader-bar {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+.reader-bar .rb-pos { font-size: 13px; color: var(--ink-faint); letter-spacing: 1px; margin: 0 6px; }
+.reader-bar .rb-tools { margin-left: auto; display: flex; gap: 8px; }
+.reader-content {
+  background: var(--card);
+  border: 1px solid var(--line-soft);
+  border-radius: 16px;
+  padding: 40px 46px 60px;
+  min-height: 60vh;
+  font-size: 18px;
+  box-shadow: 0 10px 34px var(--shadow-warm);
+}
+.reader-content .rc-title {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 28px; letter-spacing: 5px;
+  color: var(--gold-deep);
+  text-align: center;
+  margin-bottom: 26px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed var(--line-soft);
+}
+.reader-content .rc-body p {
+  text-indent: 2em;
+  color: var(--ink);
+  line-height: 2.05;
+  margin-bottom: 0.9em;
+}
+.reader-content .rc-body h2 {
+  font-family: "STKaiti", "KaiTi", "SimSun", serif;
+  font-size: 22px; color: var(--gold-deep); text-align: center;
+  letter-spacing: 4px; margin: 26px 0 14px;
+}
+.reader-content .rc-body em { color: var(--pink); font-style: normal; }
+.reader-content .rc-body strong { color: var(--gold-deep); }
+/* 封面页与全书完（居中排版） */
+.reader-content .rc-cover { text-align: center; padding-top: 26px; }
+.reader-content .rc-cover h2 {
+  font-size: 44px; letter-spacing: 12px;
+  background: linear-gradient(180deg, #ffdf96, #e89c2e);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+.reader-content .rc-cover p { text-indent: 0; color: var(--ink-dim); letter-spacing: 2px; margin-bottom: 6px; }
+.reader-content .rc-colophon { text-align: center; padding-top: 30px; }
+.reader-content .rc-colophon p { text-indent: 0; color: var(--ink-dim); margin-bottom: 14px; }
+.reader-content .rc-colophon p:first-child { color: var(--gold-deep); font-size: 1.1em; }
+.reader-foot {
+  display: flex; justify-content: center; gap: 12px;
+  margin-top: 16px;
+}
+
+/* ---------- 全站背景音乐悬浮按钮 ---------- */
+#bgm-float {
+  position: fixed; right: 22px; bottom: 24px; z-index: 200;
+  width: 54px; height: 54px;
+  border-radius: 50%;
+  border: 2px solid var(--gold-deep);
+  background: linear-gradient(180deg, #f7c66f, var(--gold) 55%, var(--gold-deep));
+  color: #fff;
+  font-size: 24px;
+  font-family: "STKaiti", "KaiTi", serif;
+  box-shadow: 0 6px 20px rgba(233, 161, 59, 0.45);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s ease;
+  user-select: none;
+}
+#bgm-float:hover { transform: scale(1.08); }
+#bgm-float.playing {
+  animation: bgmPulse 1.8s ease-out infinite;
+}
+@keyframes bgmPulse {
+  0%   { box-shadow: 0 0 0 0 rgba(233, 161, 59, 0.55); }
+  100% { box-shadow: 0 0 0 20px rgba(233, 161, 59, 0); }
+}
+/* 未播放时：呼吸光晕提示 */
+#bgm-float:not(.playing) {
+  animation: bgmHint 1.6s ease-in-out infinite;
+}
+@keyframes bgmHint {
+  0%, 100% { box-shadow: 0 6px 20px rgba(233, 161, 59, 0.4); }
+  50%      { box-shadow: 0 6px 28px rgba(233, 161, 59, 0.9); }
+}
+
+/* ---------- 页脚 ---------- */
+footer {
+  position: relative; z-index: 5;
+  text-align: center;
+  padding: 26px 20px 40px;
+  color: var(--ink-faint);
+  font-size: 12.5px;
+  letter-spacing: 2px;
+  border-top: 1px solid var(--line-soft);
+  background: rgba(255, 250, 238, 0.5);
+}
+footer a { color: var(--gold-deep); text-decoration: none; }
+footer a:hover { color: var(--gold); }
+
+/* ---------- 响应式 ---------- */
+@media (max-width: 760px) {
+  header.site-nav { flex-direction: column; gap: 10px; padding: 12px 14px; }
+  .hero { flex-direction: column-reverse; gap: 26px; }
+  .hero-art { max-width: 300px; }
+  main { padding: 24px 14px 70px; }
+  .chara-card { padding: 20px 18px; }
+  .book-card { flex-direction: column; padding: 20px 18px; }
+  .book-cover { flex: 0 0 auto; width: 170px; align-self: center; }
+  .profile-card.with-photo { flex-direction: column; align-items: center; }
+  .profile-card .pc-photo { flex: 0 0 auto; width: 180px; }
+  .reader { flex-direction: column; }
+  .reader-side {
+    position: fixed; left: 0; top: 0; bottom: 0; z-index: 90;
+    width: min(78vw, 300px);
+    max-height: none;
+    border-radius: 0 16px 16px 0;
+    transform: translateX(-105%);
+    transition: transform 0.25s ease;
+    background: rgba(255, 252, 242, 0.97);
+  }
+  .reader-side.open { transform: translateX(0); }
+  #btn-close-side { display: inline-block; }
+  .reader-content { padding: 26px 20px 44px; }
+  .reader-bar .rb-tools { margin-left: 0; }
+}

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>黄昏塔 · 熙叆救出聆淅</title>
+<meta name="description" content="一个像杀戮尖塔的卡牌策略肉鸽游戏：熙叆深入黄昏塔，救回被零与灵带走的聆淅。">
+<link rel="stylesheet" href="css/style.css">
+<meta name="keywords" content="熙叆,聆淅,向日葵精灵,雨露精灵,聆熙童话,魔法时间的童话,黄昏下的天使,雨中的天使,角色资源站,电子书">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="聆熙花影馆 · 熙叆角色资源站">
+<meta property="og:title" content="黄昏塔 · 熙叆救出聆淅 - 卡牌肉鸽游戏">
+<meta property="og:description" content="像《杀戮尖塔》的卡牌策略肉鸽游戏：熙叆深入1200层黄昏塔，击败暴君·零与独裁者·灵，救回聆淅。">
+<meta property="og:image" content="../preview/009.webp">
+<meta name="theme-color" content="#e9a13b">
+<link rel="icon" href="../favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+</head>
+<body>
+<div id="stars"></div>
+<a href="../index.html" id="back-to-site">← 返回资源站</a>
+<style>
+#back-to-site {
+  position: fixed; top: 14px; left: 14px; z-index: 999;
+  padding: 6px 16px;
+  font-size: 13px; letter-spacing: 1px;
+  color: #7a4f14; text-decoration: none;
+  background: rgba(255, 250, 238, 0.85);
+  border: 1px solid rgba(214, 158, 74, 0.6);
+  border-radius: 999px;
+  box-shadow: 0 2px 8px rgba(196, 140, 60, 0.25);
+  backdrop-filter: blur(4px);
+  transition: all 0.15s ease;
+}
+#back-to-site:hover { background: #fff; box-shadow: 0 4px 14px rgba(233, 161, 59, 0.4); }
+</style>
+
+<!-- ========== 标题画面 ========== -->
+<section id="screen-title" class="screen active">
+  <div class="title-inner">
+    <p class="logo-kicker">SUNFLOWER SPIRIT · 银河铁道梦</p>
+    <h1 class="logo-main">黄昏塔</h1>
+    <p class="logo-sub">～熙叆救出聆淅～</p>
+    <div class="story-box">
+      <p>因为梦的失误，聆淅直接进入到了梦中的银河铁道列车。</p>
+      <p>她遇到了灵和零。别称“暴君”的零与别称“独裁者”的灵，正想找个听话的仆人，便把聆淅催眠带走了。</p>
+      <p>熙叆和梦进入梦中后，妹妹聆淅已不见踪影，只留下零和灵的纸条。</p>
+      <p>熙叆看到后，什么也没说，直接来到目的地“黄昏塔”。</p>
+      <p>这一路艰难险阻，她一定要救回聆淅，然后……和她结婚。</p>
+    </div>
+    <nav class="title-menu">
+      <button class="btn" id="btn-start">开始旅程</button>
+      <button class="btn ghost" id="btn-help">玩法说明</button>
+    </nav>
+  </div>
+</section>
+
+<!-- ========== 地图画面 ========== -->
+<section id="screen-map" class="screen">
+  <div class="map-header">
+    <h2>黄昏塔</h2>
+    <p id="map-floor-label">第 1 层</p>
+    <button class="btn ghost small" id="btn-map-debug">查看卡组</button>
+  </div>
+  <div id="map-container"></div>
+</section>
+
+<!-- ========== 战斗画面 ========== -->
+<section id="screen-combat" class="screen">
+  <div class="combat-top">
+    <span id="combat-floor">黄昏塔 · 第 1 层</span>
+    <span id="combat-state">战斗</span>
+  </div>
+  <div id="enemy-area"></div>
+  <div id="player-hud">
+    <div class="hud-main">
+      <div class="avatar">🌻</div>
+      <div class="hud-info">
+        <div class="hud-name">熙叆</div>
+        <div class="bar hp-bar"><span id="player-hp"></span></div>
+        <div class="bar block-bar"><span id="player-block"></span></div>
+      </div>
+      <div class="hud-status" id="player-status"></div>
+    </div>
+    <div class="hud-energy">
+      <span id="energy-num">3</span><small>/3</small>
+    </div>
+  </div>
+  <div class="deck-pile">
+    <span>抽牌堆 <b id="draw-count">0</b></span>
+    <span>弃牌堆 <b id="discard-count">0</b></span>
+    <span>消耗 <b id="exhaust-count">0</b></span>
+  </div>
+  <div id="hand-area"></div>
+  <div class="combat-actions">
+    <button class="btn" id="btn-end-turn">结束回合</button>
+    <button class="btn ghost" id="btn-view-deck">查看卡组</button>
+  </div>
+</section>
+
+<!-- ========== 奖励画面 ========== -->
+<section id="screen-reward" class="screen">
+  <div class="reward-inner">
+    <h2>战斗胜利</h2>
+    <p id="reward-desc"></p>
+    <div id="reward-cards"></div>
+    <button class="btn" id="btn-reward-continue">继续前进</button>
+  </div>
+</section>
+
+<!-- ========== 事件画面 ========== -->
+<section id="screen-event" class="screen">
+  <div class="event-inner">
+    <h2 id="event-title"></h2>
+    <div class="event-story" id="event-story"></div>
+    <div class="event-choices" id="event-choices"></div>
+    <button class="btn ghost" id="btn-event-continue" style="display:none">继续</button>
+  </div>
+</section>
+
+<!-- ========== 休息画面 ========== -->
+<section id="screen-rest" class="screen">
+  <div class="rest-inner" id="rest-inner">
+    <h2>篝火</h2>
+    <p>在黄昏塔的临时庇护所稍作休整。</p>
+    <div class="rest-actions">
+      <button class="btn" id="btn-rest-heal">休息：回复 30% 生命</button>
+      <button class="btn ghost" id="btn-rest-upgrade">锻造：升级一张卡</button>
+    </div>
+    <div id="upgrade-panel" style="display:none"></div>
+    <button class="btn ghost" id="btn-rest-continue" style="display:none">继续前进</button>
+  </div>
+</section>
+
+<!-- ========== 卡组查看 ========== -->
+<section id="screen-deck" class="screen">
+  <div class="deck-inner">
+    <h2>卡组</h2>
+    <div id="deck-list"></div>
+    <button class="btn ghost" id="btn-deck-close">返回</button>
+  </div>
+</section>
+
+<!-- ========== 玩法说明 ========== -->
+<section id="screen-help" class="screen">
+  <div class="help-inner">
+    <h2>玩法说明</h2>
+    <ul>
+      <li>像《杀戮尖塔》一样：每回合获得 3 点能量，抽 5 张牌，出牌后点击“结束回合”。</li>
+      <li>敌人头顶会显示意图：攻击 / 防御 / 强化。合理用攻击和格挡击败它们。</li>
+      <li>在 1200 层黄昏塔地图上选择路线：战斗获得卡牌奖励，精英更强但奖励更好，篝火可以回复或升级，地图可横向滚动。</li>
+      <li>最终登上塔顶，击败“暴君·零”和“独裁者·灵”，救回聆淅。</li>
+    </ul>
+    <button class="btn ghost" id="btn-help-back">返回标题</button>
+  </div>
+</section>
+
+<!-- ========== 结算画面 ========== -->
+<section id="screen-gameover" class="screen">
+  <div class="end-inner">
+    <h2>旅程中断</h2>
+    <p id="gameover-text"></p>
+    <button class="btn" id="btn-gameover-retry">重新开始</button>
+  </div>
+</section>
+
+<section id="screen-victory" class="screen">
+  <div class="end-inner">
+    <h2>黄昏塔顶 · 重逢</h2>
+    <div class="victory-story">
+      <p>零与灵在最后一刻被熙叆的执着与温柔打动，解除了催眠。</p>
+      <p>聆淅睁开眼睛，看见满身伤痕却仍在微笑的熙叆。</p>
+      <p>“我来接你回家了。”</p>
+      <p>“嗯……我们回家。”</p>
+      <p>回到向日葵花田后，熙叆牵起聆淅的手，在所有时光碎片的见证下，说出了那句准备已久的话：</p>
+      <p class="wedding-line">“和我结婚吧，聆淅。”</p>
+      <p class="wedding-line pink">“好。”</p>
+    </div>
+    <button class="btn" id="btn-victory-retry">再次踏上旅程</button>
+  </div>
+</section>
+
+<script src="js/game.js"></script>
+</body>
+</html>

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>影音资源 · 聆熙花影馆</title>
+<meta name="description" content="熙叆的三卷「会动的碎片」特别影像与主题音乐《魔法时间的童话》，在线播放与原片下载。">
+<link rel="stylesheet" href="css/style.css">
+<meta name="keywords" content="熙叆,聆淅,向日葵精灵,雨露精灵,聆熙童话,魔法时间的童话,黄昏下的天使,雨中的天使,角色资源站,电子书">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="聆熙花影馆 · 熙叆角色资源站">
+<meta property="og:title" content="影音资源 - 聆熙花影馆">
+<meta property="og:description" content="三卷会动的碎片影像与主题音乐《魔法时间的童话》在线播放与下载。">
+<meta property="og:image" content="preview/009.webp">
+<meta name="theme-color" content="#e9a13b">
+<link rel="icon" href="favicon.png" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+</head>
+<body>
+<div id="stars"></div>
+
+<header class="site-nav">
+  <a class="brand" href="index.html">
+    <span class="brand-name">聆熙花影馆</span>
+    <span class="brand-sub">きあい · 黄昏下的天使</span>
+  </a>
+  <nav class="menu">
+    <a href="index.html">主页</a>
+    <a href="gallery.html">时光图库</a>
+    <a href="media.html">影音资源</a>
+    <a href="about.html">角色设定</a>
+    <a href="read.html">聆熙童话</a>
+    <a href="tower/index.html">黄昏塔</a>
+    <a href="game/index.html" target="_blank" rel="noopener">▶ 进入游戏</a>
+  </nav>
+</header>
+
+<main>
+  <h2 class="section-title">影音资源</h2>
+  <p class="section-sub">会动的碎片 · 三卷特别影像 ／ 主题音乐《魔法时间的童话》</p>
+
+  <!-- ======== 视频 ======== -->
+  <div id="video-list"></div>
+
+  <!-- ======== 音乐 ======== -->
+  <div class="audio-card">
+    <div class="ac-head">
+      <h3>♪ <span id="bgm-title">主题音乐《魔法时间的童话》</span></h3>
+      <span class="vc-date" id="bgm-date">主题曲 · 循环播放</span>
+    </div>
+    <audio id="bgm-player" controls preload="auto" loop autoplay></audio>
+    <div class="ac-actions">
+      <a class="btn small" id="bgm-orig" href="#" target="_blank" rel="noopener">下载 wav 原声 ⬇</a>
+    </div>
+    <p class="vc-note" id="bgm-status"></p>
+    <p class="vc-note">※ 网页内播放为压缩版 m4a；wav 原声保存在本地《熙叆》文件夹，点击上方按钮即可查看/保存。</p>
+  </div>
+</main>
+
+<footer>
+  聆熙花影馆 · 素材与设定均来自《魔法时间的童话 ～熙叆的时光物语～》 ·
+  <a href="game/index.html" target="_blank" rel="noopener">进入游戏</a>
+</footer>
+
+<script src="js/site.js"></script>
+<script>
+(function () {
+  var lite = !!window.SITE.lite;
+  var list = window.SITE.media || [];
+  var host = document.getElementById('video-list');
+  var html = '';
+  list.forEach(function (m) {
+    html +=
+      '<div class="video-card">' +
+      '<div class="vc-head"><h3>✦ ' + m.title + '</h3><span class="vc-date">' + m.date + ' · ' + m.id + '</span></div>' +
+      '<video controls preload="none" playsinline src="' + m.src + '"></video>' +
+      '<div class="vc-actions">' +
+      (m.orig ? '<a class="btn small" href="' + m.orig + '" target="_blank" rel="noopener" title="' + m.origName + '">原片下载 ⬇</a>' : '') +
+      '</div>' +
+      '<p class="vc-note">' + (lite
+        ? '※ 精简版提供压缩影像在线播放；原片请使用电脑版资源站。'
+        : '※ 在线播放为网页版 mp4；原片（' + m.origName + '）保存在本地《熙叆》文件夹。') + '</p>' +
+      '</div>';
+  });
+  host.innerHTML = html;
+
+  var bgm = window.SITE.bgm;
+  document.getElementById('bgm-title').textContent = '♪ ' + bgm.title;
+  var orig = document.getElementById('bgm-orig');
+  if (bgm.orig) {
+    orig.href = bgm.orig;
+    orig.title = '原声：' + bgm.origName;
+  } else {
+    orig.style.display = 'none';
+  }
+  var player = document.getElementById('bgm-player');
+  var statusEl = document.getElementById('bgm-status');
+  player.src = bgm.src;
+  player.load();
+
+  /* 与全站背景音乐共享播放状态：从上次进度续播，并把状态写回 localStorage */
+  try {
+    if (localStorage.getItem("xi'ai_bgm_on") === '1') {
+      var savedT = parseFloat(localStorage.getItem("xi'ai_bgm_time") || '0');
+      if (!isNaN(savedT) && savedT > 0) {
+        // 音频就绪后再定位（过早 seek 会被重置）
+        var seekDone = false;
+        player.addEventListener('loadedmetadata', function () {
+          if (seekDone) return;
+          seekDone = true;
+          try { if (Math.abs(player.currentTime - savedT) > 2) player.currentTime = savedT; } catch (e) { }
+        }, { once: true });
+      }
+    }
+  } catch (e) { }
+  function bgmSave() {
+    try {
+      localStorage.setItem("xi'ai_bgm_on", player.paused ? '0' : '1');
+      localStorage.setItem("xi'ai_bgm_time", String(player.currentTime || 0));
+    } catch (e) { }
+  }
+  player.addEventListener('play', function () {
+    if (player.muted) player.muted = false; // 静音启动后立即出声
+    bgmSave();
+  });
+  player.addEventListener('pause', bgmSave);
+  window.addEventListener('pagehide', bgmSave); // 跳转/关闭时精确保存
+  setInterval(function () {
+    if (!player.paused) {
+      try { localStorage.setItem("xi'ai_bgm_time", String(player.currentTime || 0)); } catch (e) { }
+    }
+  }, 3000);
+
+  /* 自动播放：静音启动（浏览器必允许 muted autoplay），出声瞬间恢复音量；
+     多时机反复尝试（音频就绪 / 页面加载完成 / 延迟重试） */
+  var fallbackArmed = false;
+  function tryPlay() {
+    if (!player.paused) return;
+    player.muted = true;
+    var p = player.play();
+    if (p && p.catch) {
+      p.then(function () {
+        statusEl.textContent = '♪ 主题音乐已自动播放';
+      }).catch(function () {
+        player.muted = false;
+        statusEl.textContent = '♪ 浏览器拦截了自动播放，点击页面任意处开始播放音乐';
+        if (!fallbackArmed) armFallback();
+      });
+    }
+  }
+  player.addEventListener('loadedmetadata', tryPlay);
+  player.addEventListener('canplay', tryPlay);
+  window.addEventListener('load', tryPlay);
+  setTimeout(tryPlay, 1000);
+  setTimeout(tryPlay, 3000);
+  function armFallback() {
+    var started = false;
+    ['click', 'touchstart', 'keydown'].forEach(function (ev) {
+      document.addEventListener(ev, function () {
+        if (started) return;
+        started = true;
+        player.play().then(function () {
+          statusEl.textContent = '♪ 主题音乐已开始播放';
+        }).catch(function () { });
+      }, { once: true });
+    });
+  }
+  tryPlay();
+})();
+</script>
+</body>
+</html>

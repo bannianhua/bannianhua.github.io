@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>魔法时间的童话 ～熙叆的时光物语～</title>
+<meta name="description" content="向日葵精灵「熙叆」的视觉小说:与她一起走过一年四季,收集时光碎片。黄昏,是她最爱的魔法时间。">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="stars"></div>
+
+<!-- ============ 标题画面 ============ -->
+<section id="screen-title" class="screen">
+  <div class="title-inner">
+    <div class="game-logo">
+      <p class="logo-kicker">SUNFLOWER SPIRIT · 向日葵精灵</p>
+      <h1 class="logo-main">魔法时间的童话</h1>
+      <p class="logo-sub">～ 熙叆的时光物语 ～</p>
+    </div>
+    <figure class="title-frame">
+      <img id="title-frame-img" alt="时光碎片">
+      <figcaption id="title-frame-cap">时光碎片</figcaption>
+    </figure>
+    <nav class="title-menu" id="title-menu"></nav>
+    <p class="title-foot">黄昏下的天使 · 2025.夏 — 2026.秋 · <a href="index.html" target="_blank" rel="noopener">聆熙花影馆</a></p>
+  </div>
+</section>
+
+<!-- ============ 游戏画面 ============ -->
+<section id="screen-game" class="screen">
+  <div id="chapter-banner"><div id="chapter-title"></div><div id="chapter-name"></div></div>
+
+  <div id="stage">
+    <figure id="photo-frame">
+      <div id="photo-holder"><img id="photo-img" alt="时光碎片"></div>
+      <figcaption id="photo-date"></figcaption>
+    </figure>
+  </div>
+
+  <div id="dialogue-area">
+    <div id="dialogue-box">
+      <div id="name-plate"><span id="speaker-name"></span></div>
+      <div id="text-wrap"><p id="text-line"></p></div>
+      <div id="advance-hint">▼</div>
+    </div>
+  </div>
+
+  <div id="choices"></div>
+
+  <div id="hud">
+    <span id="hud-chapter"></span>
+    <span id="hud-progress">碎片 0/74</span>
+    <span id="hud-endings"></span>
+  </div>
+
+  <div id="game-menu-bar">
+    <button data-act="log">记录</button>
+    <button data-act="auto">自动</button>
+    <button data-act="skip">快进</button>
+    <button data-act="save">存档</button>
+    <button data-act="menu">菜单</button>
+  </div>
+</section>
+
+<!-- ============ 时光图库 ============ -->
+<section id="screen-gallery" class="screen">
+  <div class="screen-scroll">
+    <h2>时光图库</h2>
+    <p class="screen-sub">熙叆用双手拍下的时光碎片 · 已收集 <span id="gallery-count">0/74</span> · 点击可放大</p>
+    <div id="gallery-grid"></div>
+  </div>
+  <button class="btn back-btn" data-nav="title">返回标题</button>
+</section>
+
+<!-- ============ 结局收藏 ============ -->
+<section id="screen-endings" class="screen">
+  <div class="screen-scroll">
+    <h2>结局收藏</h2>
+    <p class="screen-sub">不同的选择,会走到不同的结局 · 共 3 种</p>
+    <div id="endings-grid"></div>
+  </div>
+  <button class="btn back-btn" data-nav="title">返回标题</button>
+</section>
+
+<!-- ============ 系统设置 ============ -->
+<section id="screen-settings" class="screen">
+  <div class="screen-scroll">
+    <h2>系统设置</h2>
+    <div class="settings-panel">
+      <div class="setting-row">
+        <span>文字速度</span>
+        <span class="set-val" id="speed-val">4</span>
+        <input type="range" id="set-speed" min="1" max="8" step="1" value="4">
+      </div>
+      <div class="setting-row">
+        <span>音乐音量</span>
+        <span class="set-val" id="vol-val">80</span>
+        <input type="range" id="set-vol" min="0" max="100" step="1" value="80">
+      </div>
+      <div class="setting-row">
+        <span>音效</span>
+        <label class="switch"><input type="checkbox" id="set-se" checked><span class="slider"></span></label>
+      </div>
+      <div class="danger-zone">
+        <button id="btn-wipe" class="btn btn-danger">清除全部存档与进度</button>
+      </div>
+    </div>
+  </div>
+  <button class="btn back-btn" data-nav="title">返回标题</button>
+</section>
+
+<!-- ============ 操作说明 ============ -->
+<section id="screen-help" class="screen">
+  <div class="screen-scroll">
+    <h2>操作说明</h2>
+    <div class="help-panel">
+      <p><b>鼠标点击 / 空格 / 回车</b> — 推进对话(正在打字时再点一次可立即显示全文)</p>
+      <p><b>L</b> — 对话记录　<b>A</b> — 自动播放　<b>Esc</b> — 打开菜单</p>
+      <p>剧情中的<b>选项</b>会累积「羁绊值」,决定三种不同的结局。</p>
+      <p>收集到的时光碎片会收录进「时光图库」,「会动的碎片」是特别影像。</p>
+      <p>本作与<a href="index.html" target="_blank" rel="noopener">聆熙花影馆</a>同属「黄昏魔法时间 · 向日葵」系列——那里有熙叆的完整角色设定。</p>
+      <p class="help-note">※ 碎片出自熙叆的四季摄影,若个别画面与文字略有错位——那是魔法的时间错位,请别介意。</p>
+      <p class="help-note">※ 建议使用 Chrome / Edge 打开本游戏,并保持图片、视频文件夹与游戏文件在一起。</p>
+    </div>
+  </div>
+  <button class="btn back-btn" data-nav="title">返回标题</button>
+</section>
+
+<!-- ============ 影像播放 ============ -->
+<div id="video-overlay" class="overlay hidden">
+  <div class="video-frame">
+    <video id="video-el" controls playsinline preload="auto"></video>
+    <div class="video-bar">
+      <span id="video-title">会动的碎片</span>
+      <button class="btn" id="btn-video-skip">跳过影像 ▸</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 对话记录 ============ -->
+<div id="log-overlay" class="overlay hidden">
+  <div class="panel">
+    <h3>对话记录</h3>
+    <div id="log-body"></div>
+    <button class="btn" id="btn-log-close">关闭</button>
+  </div>
+</div>
+
+<!-- ============ 存档 / 读档 ============ -->
+<div id="save-overlay" class="overlay hidden">
+  <div class="panel">
+    <h3 id="save-title">存档</h3>
+    <div class="save-tabs">
+      <button class="btn tab active" data-tab="save">存档</button>
+      <button class="btn tab" data-tab="load">读档</button>
+    </div>
+    <div id="save-slots"></div>
+    <button class="btn" id="btn-save-close">关闭</button>
+  </div>
+</div>
+
+<!-- ============ 确认框 ============ -->
+<div id="confirm-overlay" class="overlay hidden">
+  <div class="panel small">
+    <p id="confirm-text"></p>
+    <div class="btn-row">
+      <button class="btn" id="btn-confirm-yes">确定</button>
+      <button class="btn" id="btn-confirm-no">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 结局卡 ============ -->
+<div id="ending-overlay" class="overlay hidden">
+  <div id="ending-card">
+    <p id="ending-type">TRUE END</p>
+    <h2 id="ending-name"></h2>
+    <p id="ending-desc"></p>
+    <button class="btn" id="btn-ending-next">继续 ▸</button>
+  </div>
+</div>
+
+<!-- ============ 片尾 ============ -->
+<div id="credits-overlay" class="overlay hidden">
+  <div id="credits-scroll"></div>
+  <button class="btn" id="btn-credits-skip">返回标题</button>
+</div>
+
+<!-- ============ 照片放大 ============ -->
+<div id="photo-overlay" class="overlay hidden">
+  <div id="photo-big-wrap">
+    <img id="photo-big" alt="时光碎片">
+    <p id="photo-big-date"></p>
+    <button class="btn" id="btn-photo-close">关闭</button>
+  </div>
+</div>
+
+<audio id="bgm" loop preload="none"></audio>
+<script src="js/data.js"></script>
+<script src="js/game.js"></script>
+</body>
+</html>
