@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://bannianhua.github.io/sitemap.xml
